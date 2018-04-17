@@ -7,7 +7,7 @@ import unittest
 
 class TestNrz_i(unittest.TestCase):
     def test_all_combinations_in_2_bytes(self):
-        hex_digits = ''.join(sorted(set(string.hexdigits.upper())))
+        hex_digits = sorted(set(string.hexdigits.upper()))  # list of hexa digits
         for hex0 in hex_digits:
             for hex1 in hex_digits:
                 for hex2 in hex_digits:
