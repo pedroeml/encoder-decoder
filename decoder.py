@@ -18,28 +18,58 @@ class Binary:
 
 
 def nrz_i(signal_string):
-    binary_manager = Binary()
+    bit_manager = Binary()
 
-    previous_siginal = None
+    previous_signal = None
     for signal in signal_string:
-        if previous_siginal is None:
+        if previous_signal is None:
             if signal == '-':
-                binary_manager.keep()
+                bit_manager.keep()
             else:
-                binary_manager.flip()
+                bit_manager.flip()
         else:
-            # TODO: Fix this
-            if signal == previous_siginal:
-                if binary_manager.bit == '0':
-                    binary_manager.keep()
+            if signal == previous_signal:
+                if bit_manager.bit == '0':
+                    bit_manager.keep()
                 else:
-                    binary_manager.flip()
+                    bit_manager.flip()
             else:
-                if binary_manager.bit == '1':
-                    binary_manager.keep()
+                if bit_manager.bit == '1':
+                    bit_manager.keep()
                 else:
-                    binary_manager.flip()
+                    bit_manager.flip()
 
-        previous_siginal = signal
+        previous_signal = signal
 
-    return str(binary_manager)
+    return str(bit_manager)
+
+
+def manchester(signal_string):
+    if len(signal_string) % 2 != 0:
+        raise Exception('The list must be even because it has to be decoded by pairs of signals.')
+
+    bit_manager = Binary()
+
+    previous_signal = None
+
+    for signal in signal_string:
+        if previous_signal is None:
+            previous_signal = signal
+        else:
+            if signal == previous_signal:
+                raise Exception('A pair of signals can\'t be of the same type.')
+            else:
+                if previous_signal == '+' and signal == '-':
+                    if bit_manager.bit == '0':
+                        bit_manager.keep()
+                    else:
+                        bit_manager.flip()
+                else:
+                    if bit_manager.bit == '0':
+                        bit_manager.flip()
+                    else:
+                        bit_manager.keep()
+
+            previous_signal = None
+
+    return str(bit_manager)
