@@ -7,17 +7,40 @@ class Binary:
         self.bit_history = deque()
 
     def flip(self):
+        """
+        Flip the bit value stored at bit attribute. If it was 1 then it becomes 0 and vice-versa.
+        The change is stored at the bit_history attribute.
+
+        """
         self.bit = '0' if self.bit == '1' else '1'
         self.keep()
 
     def keep(self):
+        """
+        Stores the current bit value stored at the bit attribute.
+
+        """
         self.bit_history.append(self.bit)
 
     def __str__(self):
+        """
+        Returns a string containing all stored bits.
+
+        :return:
+        :rtype: str
+        """
         return ''.join(list(self.bit_history))
 
 
 def nrz_i(signal_string):
+    """
+    Decodes a string of signals encoded by NRZ-I technique.
+
+    :param signal_string:
+    :type signal_string: str
+    :return:
+    :rtype: str
+    """
     bit_manager = Binary()
 
     previous_signal = None
@@ -45,6 +68,14 @@ def nrz_i(signal_string):
 
 
 def manchester(signal_string):
+    """
+    Decodes a string of signals encoded by Manchester technique.
+
+    :param signal_string:
+    :type signal_string: str
+    :return:
+    :rtype: str
+    """
     if len(signal_string) % 2 != 0:
         raise Exception('The list must be even because it has to be decoded by pairs of signals.')
 
