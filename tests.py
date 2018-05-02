@@ -14,6 +14,10 @@ class EncodingDecodingTest(unittest.TestCase):
         print('MANCHESTER')
         self.all_combinations_in_2_bytes(technique='manchester')
 
+    def test_mlt3(self):
+        print('MLT-3')
+        self.all_combinations_in_2_bytes(technique='mlt-3')
+
     def all_combinations_in_2_bytes(self, technique='nrz_i'):
         hex_digits = sorted(set(string.hexdigits.upper()))  # list of hexa digits
         for hex0 in hex_digits:
@@ -28,6 +32,9 @@ class EncodingDecodingTest(unittest.TestCase):
                             encoded_bin_string = encoder.nrz_i(bin_string)
                             decoded_signal_string = decoder.nrz_i(encoded_bin_string)
                         elif technique == 'manchester':
+                            encoded_bin_string = encoder.manchester(bin_string)
+                            decoded_signal_string = decoder.manchester(encoded_bin_string)
+                        elif technique == 'mlt-3':
                             encoded_bin_string = encoder.manchester(bin_string)
                             decoded_signal_string = decoder.manchester(encoded_bin_string)
                         else:
