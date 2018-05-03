@@ -1,4 +1,5 @@
 from collections import deque
+import pandas as pd
 
 
 class Signal:
@@ -148,3 +149,43 @@ def mlt3(bin_string):
             signal_manager.update()
 
     return str(signal_manager)
+
+
+def to8b10b(bin_string):
+    if len(bin_string) % 8 != 0:
+        raise Exception('Binary string must be formed of 8 by 8 bits.')
+
+    df = pd.read_csv('full_8b10b.csv', dtype=str)
+
+    bits_8b_list = [bin_string[i:i+8] for i in range(0, len(bin_string), 8)]
+
+    bits_10b_list = deque()
+
+    rd = -1
+
+    for byte in bits_8b_list:
+        value = None
+        if rd == -1:
+            value = df[df['H_A'].str.match(byte)]['RD_M(a_j)'].values[0]
+        elif rd == 1:
+            value = df[df['H_A'].str.match(byte)]['RD_P(a_j)'].values[0]
+
+        bits_10b_list.append(value)
+
+        count_zeros = value.count('0')
+        count_ones = value.count('1')
+
+        disparity = count_ones - count_zeros
+
+        if rd == -1:
+            if disparity == 2:
+                rd = 1
+        elif rd == 1:
+            if disparity == -2:
+                rd = -1
+
+    bits_10b_string = ''.join(list(bits_10b_list))
+
+    print('8B10B: %s' % bits_10b_string)
+
+    return nrz_i(bits_10b_string)
