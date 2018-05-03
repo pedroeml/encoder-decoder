@@ -186,6 +186,4 @@ def to8b10b(bin_string):
 
     bits_10b_string = ''.join(list(bits_10b_list))
 
-    print('8B10B: %s' % bits_10b_string)
-
-    return nrz_i(bits_10b_string)
+    return nrz_i(bits_10b_string), bits_10b_string
